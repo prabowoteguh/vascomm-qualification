@@ -1,7 +1,9 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ContohController;
+use App\Http\Controllers\LaporanController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,6 +20,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/login', [AuthController::class, 'login']);
+Route::post('/login-action', [AuthController::class, 'login_action']);
+Route::get('/logout-action', [AuthController::class, 'logout_action']);
+Route::get('/laporan', [LaporanController::class, 'index']);
 Route::get('/data', [ContohController::class, 'data']);
 Route::get('/testing', [ContohController::class, 'index']);
 
