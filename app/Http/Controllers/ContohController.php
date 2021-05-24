@@ -10,13 +10,15 @@ class ContohController extends Controller
     
     //
     function index(){
-        $client = new \GuzzleHttp\Client(['base_uri' => 'https://smksumatra40.sch.id/']);
-        $response = $client->request('GET', '/api/aktivitas.html?limit=3', array("content-type" => "application/x-www-form-urlencoded"))->getBody()->getContents();
+        $client = new Client(['base_uri' => 'https://smksumatra40.sch.id/']);
+
+        $params = array("limit" => 10);
+        $response = $client->request('GET', '/api/aktivitas.html', $params)->getBody();
         $response = json_decode($response);
         $response = $response->result->datas;
-        
         return view("brader", ["data" => $response]);
     }
+    
     function data(){
 
 
