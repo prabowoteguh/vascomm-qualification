@@ -32,7 +32,9 @@ class AuthController extends Controller
 
         if($response->success){
             $token = $response->data->token->access;
+            $user = $response->data->user;
             $request->session()->put("bacod_token", $token);
+            $request->session()->put("user", $user);
             return redirect("/laporan");
         }else{
             return redirect("/login");

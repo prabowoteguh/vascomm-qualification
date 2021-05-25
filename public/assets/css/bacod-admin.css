@@ -1,3 +1,8 @@
 .bacod-absensi-bg {
     background-color: #23c08c;
 }
+
+.bacod-login-img {
+    background-position: center !important;
+    background-size: cover !important;
+}

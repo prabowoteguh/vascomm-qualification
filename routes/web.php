@@ -16,10 +16,8 @@ use App\Http\Controllers\LaporanController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
+Route::get('/', [HomeController::class, 'index']);
+Route::get('/home', [HomeController::class, 'index']);
 Route::get('/login', [AuthController::class, 'login']);
 Route::post('/login-action', [AuthController::class, 'login_action']);
 Route::get('/logout-action', [AuthController::class, 'logout_action']);
