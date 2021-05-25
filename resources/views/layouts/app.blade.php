@@ -41,7 +41,8 @@
             <li class="nav-item active">
                 <a class="nav-link" href="index.html">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
-                    <span>Dashboard</span></a>
+                    <span>Dashboard</span>
+                </a>
             </li>
 
             <!-- Divider -->
@@ -49,7 +50,7 @@
 
             <!-- Heading -->
             <div class="sidebar-heading">
-                Interface
+                MODULES
             </div>
 
             <!-- Nav Item - Pages Collapse Menu -->
