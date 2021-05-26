@@ -8,6 +8,13 @@ use GuzzleHttp\Client;
 class ContohController extends Controller
 {
     
+    function home(){
+        $bacod_token = session("bacod_token");
+        if(empty($bacod_token)){
+            return redirect("/login");
+        }
+        return view("home");
+    }
     //
     function index(){
         $client = new Client(['base_uri' => 'https://smksumatra40.sch.id/']);
