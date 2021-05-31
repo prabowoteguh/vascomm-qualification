@@ -10,7 +10,7 @@ class AuthController extends Controller
     function login(){
         $bacod_token = session("bacod_token");
         if(!empty($bacod_token)){
-            return redirect("/laporan");
+            return redirect("/home");
         }
         return view("login");
     }
@@ -35,7 +35,7 @@ class AuthController extends Controller
             $user = $response->data->user;
             $request->session()->put("bacod_token", $token);
             $request->session()->put("user", $user);
-            return redirect("/laporan");
+            return redirect("/home");
         }else{
             $message = $response->message;
             return redirect("/login?message=$message");

@@ -7,16 +7,19 @@ use GuzzleHttp\Client;
 
 class ContohController extends Controller
 {
-    
-    function home(){
+
+    function home()
+    {
         $bacod_token = session("bacod_token");
-        if(empty($bacod_token)){
-            return redirect("/login");
+        if (empty($bacod_token)) {
+            // return redirect("/login");
+            return view("home");
         }
         return view("home");
     }
     //
-    function index(){
+    function index()
+    {
         $client = new Client(['base_uri' => 'https://smksumatra40.sch.id/']);
 
         $params = array("limit" => 10);
@@ -25,8 +28,9 @@ class ContohController extends Controller
         $response = $response->result->datas;
         return view("brader", ["data" => $response]);
     }
-    
-    function data(){
+
+    function data()
+    {
 
 
         $data[] = array(
