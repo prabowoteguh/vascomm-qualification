@@ -24,6 +24,11 @@
                             <div class="col-lg-6 d-none d-lg-block bacod-login-img" style="background: url('{{ asset("assets/img/bacod-1x1.png") }}')"></div>
                             <div class="col-lg-6">
                                 <div class="p-5">
+                                    @if(isset($_GET["message"]))
+                                    <div class="alert alert-danger" role="alert">
+                                        {{ $_GET["message"] }}
+                                    </div>
+                                    @endif
                                     <div class="text-center">
                                         <h1 class="h4 text-gray-900 mb-4">Login!</h1>
                                     </div>

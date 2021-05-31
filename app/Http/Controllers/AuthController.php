@@ -37,7 +37,8 @@ class AuthController extends Controller
             $request->session()->put("user", $user);
             return redirect("/laporan");
         }else{
-            return redirect("/login");
+            $message = $response->message;
+            return redirect("/login?message=$message");
         }
     }
 }
