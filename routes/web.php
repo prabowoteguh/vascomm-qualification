@@ -25,3 +25,12 @@ Route::get('/laporan', [LaporanController::class, 'index']);
 Route::get('/data', [ContohController::class, 'data']);
 Route::get('/testing', [ContohController::class, 'index']);
 
+Route::get('/karyawan/list', [App\Http\Controllers\EmployeeController::class, 'index']);
+Route::get('/karyawan/create', [App\Http\Controllers\EmployeeController::class, 'create']);
+Route::post('/karyawan/store', [App\Http\Controllers\EmployeeController::class, 'store']);
+Route::post('/karyawan/destroy/{id}', [App\Http\Controllers\EmployeeController::class, 'destroy']);
+Route::post('/karyawan/edit/{id}', [App\Http\Controllers\EmployeeController::class, 'edit']);
+Route::post('/karyawan/update', [App\Http\Controllers\EmployeeController::class, 'update']);
+// Route::prefix('employees')->group(function () {
+// });
+

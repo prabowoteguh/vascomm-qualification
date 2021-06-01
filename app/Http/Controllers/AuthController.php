@@ -19,12 +19,12 @@ class AuthController extends Controller
         return redirect("/login");
     }
     function login_action(Request $request){
-        $client = new Client(['base_uri' => 'https://api-restu.smksumatra40.sch.id/public/']);
-        $email = $request->email;
+        $client   = new Client(['base_uri' => 'https://api-restu.smksumatra40.sch.id/public/']);
+        $email    = $request->email;
         $password = $request->password;
 
-        $params = array(
-            "email" => $email,
+        $params   = array(
+            "email"    => $email,
             "password" => $password,
         );
         $response = $client->request('POST', 'login', ["form_params" => $params])->getBody();
@@ -32,7 +32,7 @@ class AuthController extends Controller
 
         if($response->success){
             $token = $response->data->token->access;
-            $user = $response->data->user;
+            $user  = $response->data->user;
             $request->session()->put("bacod_token", $token);
             $request->session()->put("user", $user);
             return redirect("/home");
