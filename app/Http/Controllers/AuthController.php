@@ -19,7 +19,7 @@ class AuthController extends Controller
         return redirect("/login");
     }
     function login_action(Request $request){
-        $client = new Client(['base_uri' => 'https://api-restu.smksumatra40.sch.id/public/']);
+        $client = new Client(['base_uri' => 'http://127.0.0.1:8000']);
         $email = $request->email;
         $password = $request->password;
 

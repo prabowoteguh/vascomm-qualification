@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ContohController;
 use App\Http\Controllers\LaporanController;
+use App\Http\Controllers\DashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,8 +17,8 @@ use App\Http\Controllers\LaporanController;
 |
 */
 
-Route::get('/', [ContohController::class, 'home']);
-Route::get('/home', [ContohController::class, 'home']);
+Route::get('/', 'App\Http\Controllers\DashboardController@index');
+Route::get('/home', 'App\Http\Controllers\DashboardController@index');
 Route::get('/login', [AuthController::class, 'login']);
 Route::post('/login-action', [AuthController::class, 'login_action']);
 Route::get('/logout-action', [AuthController::class, 'logout_action']);
