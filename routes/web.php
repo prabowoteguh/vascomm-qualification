@@ -1,10 +1,6 @@
 <?php
 
-use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ContohController;
-use App\Http\Controllers\LaporanController;
-use App\Http\Controllers\DashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,12 +13,12 @@ use App\Http\Controllers\DashboardController;
 |
 */
 
-Route::get('/', 'App\Http\Controllers\DashboardController@index');
-Route::get('/home', 'App\Http\Controllers\DashboardController@index');
-Route::get('/login', [AuthController::class, 'login']);
-Route::post('/login-action', [AuthController::class, 'login_action']);
-Route::get('/logout-action', [AuthController::class, 'logout_action']);
-Route::get('/laporan', [LaporanController::class, 'index']);
-Route::get('/data', [ContohController::class, 'data']);
-Route::get('/testing', [ContohController::class, 'index']);
+Route::get('/', 'DashboardController@index');
+Route::get('/home', 'DashboardController@index');
+Route::get('/login', 'AuthController@login');
+Route::post('/login-action', 'AuthController@login_action');
+Route::get('/logout-action', 'AuthController@logout_action');
+Route::get('/laporan', 'LaporanController@index');
+Route::get('/data', 'ContohController@data');
+Route::get('/testing', 'ContohController@index');
 
