@@ -12,8 +12,7 @@ class ContohController extends Controller
     {
         $bacod_token = session("bacod_token");
         if (empty($bacod_token)) {
-            // return redirect("/login");
-            return view("home");
+            return redirect("/login");
         }
         return view("home");
     }

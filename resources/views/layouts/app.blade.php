@@ -11,8 +11,10 @@
     <link
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
+    <link rel="stylesheet" href="{{ mix('css/app.css') }}">
     <link href="{{ asset("assets/css/sb-admin-2.min.css") }}" rel="stylesheet">
     <link href="{{ asset("assets/css/bacod-admin.css") }}" rel="stylesheet">
+    <script src="{{ mix('js/app.js') }}" defer></script>
 </head>
 <body id="page-top">
     <div id="wrapper">
@@ -89,7 +91,7 @@
                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                               <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{ session("user")->name }}</span>
                               <img class="img-profile rounded-circle"
-                                  src="{{ session("user")->avatar }}">
+                                  src="{{ session('user')->avatar }}">
                           </a>
                           <!-- Dropdown - User Information -->
                           <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
@@ -98,10 +100,14 @@
                                   <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                   Profile
                               </a>
-                              <a class="dropdown-item" href="/logout-action">
-                                  <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                                  Logout
-                              </a>
+                              <form action="/logout" method="POST">
+                                @csrf
+                                <input type="hidden" name="jwt" value="{{ session('bacod_token') }}">
+                                <button class="dropdown-item" type="submit">
+                                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Logout
+                                </button>
+                              </form>
                           </div>
                       </li>
                   </ul>
