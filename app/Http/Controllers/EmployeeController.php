@@ -13,11 +13,7 @@ class EmployeeController extends Controller
 {
     public function __construct()
     {
-        // $this->middleware('auth:api', ['except' => []]);
-        $bacod_token = session("bacod_token");
-        if (empty($bacod_token)) {
-            return redirect("/login");
-        }
+        //
     }
 
     /**
@@ -27,7 +23,7 @@ class EmployeeController extends Controller
      */
     public function index()
     {
-        $record = User::where('role', 2)->paginate(10);
+        $record = User::paginate(10);
         return view('employees.index', compact('record'));
     }
 
@@ -53,27 +49,26 @@ class EmployeeController extends Controller
    		$this->validate($request, [
 			'name'     => 'required',
 			'email'    => 'required|email|unique:users',
-			'phone'    => 'required|unique:users',
-			'address'  => 'required',
-			'position' => 'required',
+			'role' => 'required',
 	    ]);
-
-        // if ($request->hasFile('avatar')) {
-        //     #upload
-        //     $request->file('avatar');
-        // }
 
         /* ===== Your transaction goes here ===== */
         try {
             DB::beginTransaction();
+            $attachment = "uploads/avatars/default.png";
+            $email      = explode('@', $request->email);
+            if ($request->hasFile('avatar')) {
+				$file       = $request->file('avatar');
+				$fileName   = $file->getClientOriginalName();
+				$fileExt    = $file->getClientOriginalExtension();
+				$attachment = 'uploads/avatars/avatar-'.$email[0].'-'.Date('dmY-His').'.'.$fileExt;
+	        }
+
             $data = [
-				'name'     => $request->name,
-				'email'    => $request->email,
-				'phone'    => $request->phone,
-				'role'     => 2,
-				'address'  => $request->address,
-				'avatar'   => "https://i.pinimg.com/originals/51/f6/fb/51f6fb256629fc755b8870c801092942.png",
-				'position' => $request->position,
+				'name'   => $request->name,
+				'email'  => $request->email,
+				'role'   => $request->role,
+				'avatar' => $attachment,
             ];
             
 			$create           = new User($data);
@@ -130,29 +125,28 @@ class EmployeeController extends Controller
     {
         /* ===== Your Validation is Here ===== */
    		$this->validate($request, [
-			'name'     => 'required',
-			'email'    => 'required|email|unique:users,email,'. $request->id,
-			'phone'    => 'required|unique:users,phone,'. $request->id,
-			'address'  => 'required',
-			'position' => 'required',
+			'name'  => 'required',
+			'email' => 'required|email|unique:users,email,'. $request->id,
+			'role'  => 'required',
 	    ]);
-
-        // if ($request->hasFile('avatar')) {
-        //     #upload
-        //     $request->file('avatar');
-        // }
 
         /* ===== Your transaction goes here ===== */
         try {
             DB::beginTransaction();
+            $attachment = "uploads/avatars/default.png";
+            $email      = explode('@', $request->email);
+            if ($request->hasFile('avatar')) {
+				$file       = $request->file('avatar');
+				$fileName   = $file->getClientOriginalName();
+				$fileExt    = $file->getClientOriginalExtension();
+				$attachment = 'uploads/avatars/avatar-'.$email[0].'-'.Date('dmY-His').'.'.$fileExt;
+	        }
+
             $data = [
-				'name'     => $request->name,
-				'email'    => $request->email,
-				'phone'    => $request->phone,
-				'role'     => 2,
-				'address'  => $request->address,
-				'avatar'   => "https://i.pinimg.com/originals/51/f6/fb/51f6fb256629fc755b8870c801092942.png",
-				'position' => $request->position,
+				'name'   => $request->name,
+				'email'  => $request->email,
+				'role'   => $request->role,
+				'avatar' => $attachment,
             ];
             
 			$user   = User::findOrfail($request->id);

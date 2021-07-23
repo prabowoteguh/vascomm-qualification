@@ -4,9 +4,9 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <title>SHOE WORKSHOP - Dashboard</title>
+    <meta name="description" content="Vascomm Test">
+    <meta name="author" content="prabowoteguh">
+    <title>Dashboard</title>
     <link href="{{ asset("assets/vendor/fontawesome-free/css/all.min.css") }}" rel="stylesheet" type="text/css">
     <link
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
@@ -21,7 +21,7 @@
         <ul class="navbar-nav bacod-absensi-bg sidebar sidebar-dark accordion" id="accordionSidebar">
 
             <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
-                <div class="sidebar-brand-text mx-3">SHOE WORKSHOP</div>
+                <div class="sidebar-brand-text mx-3">Prabowo Teguh - Vascomm</div>
             </a>
 
             <hr class="sidebar-divider my-0">
@@ -40,17 +40,10 @@
             </div>
 
             <li class="nav-item">
-                <a class="nav-link" href="/laporan">
-                    <i class="fas fa-fw fa-print"></i>
-                    <span>Laporan</span>
-                </a>
-            </li>
-
-            <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
                     aria-expanded="true" aria-controls="collapseUtilities">
                     <i class="fas fa-fw fa-users"></i>
-                    <span>Karyawan</span>
+                    <span>User</span>
                 </a>
                 <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
                     data-parent="#accordionSidebar">
@@ -89,9 +82,9 @@
                       <li class="nav-item dropdown no-arrow">
                           <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                              <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{ session("user")->name }}</span>
+                              <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{ Auth::user()->name }}</span>
                               <img class="img-profile rounded-circle"
-                                  src="{{ session('user')->avatar }}">
+                                  src="{{ url(Auth::user()->avatar) }}">
                           </a>
                           <!-- Dropdown - User Information -->
                           <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
@@ -100,14 +93,10 @@
                                   <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                   Profile
                               </a>
-                              <form action="/logout" method="POST">
-                                @csrf
-                                <input type="hidden" name="jwt" value="{{ session('bacod_token') }}">
-                                <button class="dropdown-item" type="submit">
+                                <button class="dropdown-item" type="button" data-target="#logoutModal" data-toggle="modal">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Logout
                                 </button>
-                              </form>
                           </div>
                       </li>
                   </ul>
@@ -123,7 +112,7 @@
             <footer class="sticky-footer bg-white">
                 <div class="container my-auto">
                     <div class="copyright text-center my-auto">
-                        <span>Powered by &copy; BACOD 2021</span>
+                        <span>Powered by &copy; prabowoteguh 2021</span>
                     </div>
                 </div>
             </footer>
@@ -154,7 +143,7 @@
                 <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="login.html">Logout</a>
+                    <a class="btn btn-primary" href="{{ route("logout") }}">Logout</a>
                 </div>
             </div>
         </div>

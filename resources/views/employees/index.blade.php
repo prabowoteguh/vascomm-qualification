@@ -8,8 +8,7 @@
         border-color: #5cb85c !important;
     }
 </style>
-<h1 class="h3 mb-2 text-gray-800">List Karyawan</h1>
-<!-- <p class="mb-4">Selamat datang di SHOE WORKSHOP DESKTOP APP, disini anda bisa mengelola Laporan Absensi, data Karyawan, dan melihat statistik Absen.</p> -->
+<h1 class="h3 mb-2 text-gray-800">List User</h1>
 {{-- Alert --}}
     @if ($errors->any())
         @foreach ($errors->all() as $error)
@@ -40,7 +39,7 @@
                         <h6 class="m-0 font-weight-bold text-primary">Karyawan</h6>
                     </div>
                     <div class="col-md-6">
-                        <a href="/karyawan/create" class="btn btn-success float-right"><i class="fa fa-plus"></i>Tambah</a>
+                        <a href="/user/create" class="btn btn-success float-right"><i class="fa fa-plus"></i>Tambah</a>
                     </div>
                 </div>
             </div>
@@ -51,9 +50,7 @@
                             <th scope="col text-center">#</th>
                             <th scope="col text-center">Nama</th>
                             <th scope="col text-center">Email</th>
-                            <th scope="col text-center">No. HP</th>
-                            <th scope="col text-center">Jabatan</th>
-                            <th scope="col text-center">Alamat</th>
+                            <th scope="col text-center">Role</th>
                             <th scope="col text-center" width="15%">Aksi</th>
                         </tr>
                     </thead>
@@ -63,14 +60,12 @@
                                 <td scope="row">#</td>
                                 <td>{{ $v->name }}</td>
                                 <td>{{ $v->email }}</td>
-                                <td>{{ $v->phone }}</td>
-                                <td>{{ $v->position }}</td>
-                                <td>{{ $v->address }}</td>
+                                <td>{{ ($v->role == 1 ? "Admin" : "User") }}</td>
                                 <td class="text-center">
-                                    <a href="/karyawan/edit/{{ $v->id }}" class="btn btn-primary"> <i class="fa fa-edit"></i> </a>
-                                    <a href="/karyawan/destroy/{{ $v->id }}" class="btn btn-danger delete"> <i class="fa fa-trash"></i> </a>
+                                    <a href="/user/edit/{{ $v->id }}" class="btn btn-primary"> <i class="fa fa-edit"></i> </a>
+                                    <a href="/user/destroy/{{ $v->id }}" class="btn btn-danger delete"> <i class="fa fa-trash"></i> </a>
                                 </td>
-                                <form action="/karyawan/destroy/{{ $v->id }}" method="POST" id="/karyawan/destroy/{{ $v->id }}">
+                                <form action="/user/destroy/{{ $v->id }}" method="POST" id="/user/destroy/{{ $v->id }}">
                                     @csrf
                                 </form>
                             </tr>
@@ -82,7 +77,6 @@
                     </tbody>
                 </table>
                 {{ $record->links() }}
-                {{ $record->render() }}
             </div>
         </div>
     </div>
@@ -99,7 +93,6 @@
         e.preventDefault()
         if (window.confirm('Apakah anda yakin untuk menghapus data tersebut?'))
         {
-            // window.location.href = e.target.getAttribute('href')
             document.getElementById(e.target.getAttribute('href')).submit()
         }
     };
@@ -108,13 +101,5 @@
         elements[i].addEventListener('click', myFunction, false);
     }
 
-    // document.getElementsByClassName('delete')[0].addEventListener('click', function (e) {
-    //     e.preventDefault()
-    //     if (window.confirm('Apakah anda yakin untuk menghapus data tersebut?'))
-    //     {
-    //         // window.location.href = e.target.getAttribute('href')
-    //         document.getElementById(e.target.getAttribute('href')).submit()
-    //     }
-    // })
 </script>
 @endsection

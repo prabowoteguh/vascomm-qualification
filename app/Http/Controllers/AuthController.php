@@ -12,6 +12,9 @@ use Carbon\Carbon;
 use App\Mail\OtpMail;
 use App\Libraries\Helpers;
 use JWTAuth;
+use Validator;
+use Session;
+use DB;
 
 class AuthController extends Controller
 {
@@ -21,94 +24,115 @@ class AuthController extends Controller
     }
 
     public function login(Request $request) {
-        $email       = $request->email;
-		$password    = $request->password;
-        $success     = false;
-        $status_code = 403;
-        $message     = http_status_code($status_code);
-        $data        = array();
+        $rules = [
+            'email'    => 'required|email',
+            'password' => 'required|min:8'
+        ];
+  
+        $messages = [
+            'email.required'    => 'Email wajib diisi',
+            'email.email'       => 'Email tidak valid',
+            'password.required' => 'Password wajib diisi',
+            'password.string'   => 'Password harus berupa minimal 8 karakter'
+        ];
+  
+        $validator = Validator::make($request->all(), $rules, $messages);
 
-        if (empty($email) or empty($password)) {
-            $status_code = 400;
-            $message     = "You must fill all the fields";
-        } else {
-            if (strlen($password) < 6) {
-                $message = "Password should be min 6 character";
-            } else {
-                if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                    $credentials = [
-                        'email'    => $email,
-                        'password' => $password,
-                        'role'     => 1
-                    ];
-                } else {
-                    $credentials = [
-                        'phone'    => $email,
-                        'password' => $password,
-                        'role'     => 1
-                    ];
-                }
-
-                $token = auth()->attempt($credentials);
-
-                if (!$token) {
-                    $status_code = 401;
-                    $message     = "User tidak ditemukan";
-                } else {
-                    $success       = true;
-                    $status_code   = 200;
-                    $message       = "Login Success!";
-                    $data["user"]  = auth()->user();
-                    $data["token"] = array(
-                        "access"  => $token,
-                        "type"    => "bearer",
-                        "expires" => (int) auth('api')->factory()->getTTL() * 60,
-                    );
-                }
-            }
-        }
-
-        $response = b_json_response($success, $status_code, $message, $data);
-        
-        if($response['success']){
-            $token = $response['data']['token']['access'];
-            $user  = $response['data']['user'];
-            $request->session()->put("bacod_token", $token);
-            $request->session()->put("user", $user);
-            return redirect("/home");
-        }else{
-            $message = $response['message'];
-            return redirect("/login?message=$message");
+        $data = [
+            'email'     => $request->input('email'),
+            'password'  => $request->input('password'),
+        ];
+  
+        Auth::attempt($data);
+  
+        if (Auth::check()) { 
+            return redirect()->route('home');
+        } else { 
+            Session::flash('error', 'Email atau password salah');
+            return redirect()->back()->withErrors('Email atau password salah')->withInput($request->all());
         }
     }
 
-    protected function respondWithToken($token)
+    public function showFormLogin(){
+        if (Auth::check()) { 
+            return redirect()->route('home');
+        }
+        return view('login');
+    }
+
+    public function showFormRegister()
     {
-        $success       = true;
-        $status_code   = 200;
-        $message       = "Login Success!";
-        $data["user"]  = auth()->user();
-        $data["token"] = array(
-            "access"  => $token,
-            "type"    => "bearer",
-            "expires" => (int) auth('api')->factory()->getTTL() * 60,
-        );
-        $response = b_json_response($success, $status_code, $message, $data);
-        return response()->json($response, $status_code);
+        return view('register');
     }
-
-    public function login_form(){
-        $bacod_token = session("bacod_token");
-        if(!empty($bacod_token)){
-            return redirect("/home");
+  
+    public function register(Request $request)
+    {
+        $rules = [
+            'name'     => 'required|min:3|max:35',
+            'email'    => 'required|email|unique:users,email',
+            'password' => 'required|confirmed'
+        ];
+  
+        $messages = [
+            'name.required'      => 'Nama Lengkap wajib diisi',
+            'name.min'           => 'Nama lengkap minimal 3 karakter',
+            'name.max'           => 'Nama lengkap maksimal 35 karakter',
+            'email.required'     => 'Email wajib diisi',
+            'email.email'        => 'Email tidak valid',
+            'email.unique'       => 'Email sudah terdaftar',
+            'password.required'  => 'Password wajib diisi',
+            'password.confirmed' => 'Password tidak sama dengan konfirmasi password'
+        ];
+  
+        $validator = Validator::make($request->all(), $rules, $messages);
+  
+        if($validator->fails()){
+            return redirect()->back()->withErrors($validator)->withInput($request->all);
         }
-        return view("login");
-    }
 
-    public function logout(Request $request){
-        session()->forget("bacod_token");
-        // auth()->logout();
-        // auth()->invalidate();
-        return redirect("/login");
+        /* ===== Your transaction goes here ===== */
+        try {
+            DB::beginTransaction();
+
+            $attachment = '';
+            $email = explode('@', $request->email);
+            if ($request->hasFile('avatar')) {
+				$file       = $request->file('avatar');
+				$fileName   = $file->getClientOriginalName();
+				$fileExt    = $file->getClientOriginalExtension();
+				$attachment = 'uploads/avatars/avatar-'.$email[0].'-'.Date('dmY-His').'.'.$fileExt;
+	        }
+
+            $data = [
+				'name'     => $request->name,
+				'email'    => $request->email,
+				'role'     => 2,
+                'password' => Hash::make($request->password),
+				'avatar'   => $attachment !== '' ? $attachment : "uploads/avatars/default.png",
+            ];
+            
+			$create           = User::create($data);
+            if ($create) {
+                /*===== Upload File =====*/
+            	if ($request->hasFile('avatar')) {
+		            $file->move(public_path() . 'uploads/avatars/', 'avatar-'.$email[0].'-'.Date('dmY-His').'.'.$fileExt);
+		        }
+                DB::commit();
+                Session::flash('success', 'User Created Successfully!'); 
+                return redirect()->route('login')->with('success', 'Created Successfully!');
+            } else {
+                DB::rollback();
+                return redirect()->back()->withInput($request->all())->withErrors('Oops! Something went wrong');
+            }
+        } catch (\Exception $th) {
+            DB::rollback();
+            return redirect()->back()->withInput($request->all())->withErrors(['Error : ' . $th->getMessage() . ', On File : ' . $th->getFile()]);
+        }
+    }
+  
+    public function logout()
+    {
+        Auth::logout();
+        return redirect()->route('login');
     }
 }

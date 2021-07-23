@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>Login</title>
+    <title>Register</title>
     <link href="{{ asset("assets/vendor/fontawesome-free/css/all.min.css") }}" rel="stylesheet" type="text/css">
     <link
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
@@ -46,10 +46,14 @@
                                         @endif
                                     {{-- EndAlert --}}
                                     <div class="text-center">
-                                        <h1 class="h4 text-gray-900 mb-4">Login!</h1>
+                                        <h1 class="h4 text-gray-900 mb-4">Register!</h1>
                                     </div>
-                                    <form class="user" method="POST" action="/login">
+                                    <form class="user" method="POST" action="/register" enctype="multipart/form-data">
                                         {{ csrf_field() }}
+                                        <div class="form-group">
+                                            <input type="text" class="form-control form-control-user"
+                                                id="name" placeholder="Enter Fullname..." name="name">
+                                        </div>
                                         <div class="form-group">
                                             <input type="text" class="form-control form-control-user"
                                                 id="exampleInputEmail" aria-describedby="emailHelp"
@@ -57,24 +61,26 @@
                                         </div>
                                         <div class="form-group">
                                             <input type="password" class="form-control form-control-user"
-                                                id="exampleInputPassword" placeholder="Password" name="password">
+                                                id="password" placeholder="Password" name="password">
                                         </div>
-                                        {{-- <div class="form-group">
-                                            <div class="custom-control custom-checkbox small">
-                                                <input type="checkbox" class="custom-control-input" id="customCheck">
-                                                <label class="custom-control-label" for="customCheck">Remember
-                                                    Me</label>
-                                            </div>
-                                        </div> --}}
+                                        <div class="form-group">
+                                            <input type="password" class="form-control form-control-user"
+                                                id="password_confirmation" placeholder="Confirm Password" name="password_confirmation">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="avatar">Profile Photo</label>
+                                            <input type="file" class=""
+                                                id="avatar" placeholder="Choose file" name="avatar">
+                                        </div>
                                         <button type="submit" class="btn btn-primary btn-user btn-block">
-                                            Login
+                                            Register
                                         </button>
                                     </form>
                                     <hr>
                                     <div class="text-center">
                                         <h6> 
-                                            Belum punya akun? 
-                                            <a class="small" href="{{ route('register') }}">Register</a>
+                                            Sudah punya akun? 
+                                            <a class="small" href="{{ route('login') }}">Login</a>
                                         </h6>  
                                     </div>
                                 </div>
@@ -92,10 +98,8 @@
     <!-- Bootstrap core JavaScript-->
     <script src="{{ asset("assets/vendor/jquery/jquery.min.js")}}"></script>
     <script src="{{ asset("assets/vendor/bootstrap/js/bootstrap.bundle.min.js")}}"></script>
-
     <!-- Core plugin JavaScript-->
     <script src="{{ asset("assets/vendor/jquery-easing/jquery.easing.min.js")}}"></script>
-
     <!-- Custom scripts for all pages-->
     <script src="{{ asset("assets/js/sb-admin-2.min.js")}}"></script>
 

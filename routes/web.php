@@ -1,7 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\DashboardController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -12,7 +13,19 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-$router->group(['prefix' => 'karyawan'], function () use ($router){
+
+Route::get('/', [AuthController::class, 'showFormLogin'])->name('login');
+Route::get('login', [AuthController::class, 'showFormLogin'])->name('login');
+Route::post('login', [AuthController::class, 'login']);
+Route::get('register', [AuthController::class, 'showFormRegister'])->name('register');
+Route::post('register', [AuthController::class, 'register']);
+ 
+Route::group(['middleware' => 'auth'], function () {
+    Route::get('home', [DashboardController::class, 'index'])->name('home');
+    Route::get('logout', [AuthController::class, 'logout'])->name('logout');
+});
+
+$router->group(['prefix' => 'user'], function () use ($router){
     $router->get('/list', 'EmployeeController@index');
     $router->get('/create', 'EmployeeController@create');
     $router->post('/store', 'EmployeeController@store');
@@ -20,16 +33,3 @@ $router->group(['prefix' => 'karyawan'], function () use ($router){
     $router->get('/edit/{id}', 'EmployeeController@edit');
     $router->post('/update', 'EmployeeController@update');
 });
-
-Route::get('/', 'DashboardController@index');
-Route::get('/home', 'DashboardController@index');
-Route::get('/laporan', 'LaporanController@index');
-Route::get('/data', 'ContohController@data');
-Route::get('/testing', 'ContohController@index');
-Route::get('/login', 'AuthController@login_form')->name('login');
-Route::post('/login', 'AuthController@login')->middleware(['api']);
-Route::post('/logout', 'AuthController@logout');
-
-// Route::group(['prefix' => 'api'], function ($router) {
-//     Route::post('/login', 'AuthController@login');
-// });

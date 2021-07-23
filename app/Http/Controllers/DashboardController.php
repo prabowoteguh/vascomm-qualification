@@ -2,21 +2,21 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
     public function __construct()
     {
-        // $this->middleware('api');
+        // $this->middleware('web');
     }
 
     function index()
     {
-        $bacod_token = session("bacod_token");
-        if (empty($bacod_token)) {
-            return redirect("/login");
+        if (Auth::check()) { 
+            return view('home');
         }
-        return view("home");
+        return view('login');
     }
 }
