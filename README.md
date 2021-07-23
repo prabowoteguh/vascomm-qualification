@@ -21,6 +21,15 @@ Laravel is a web application framework with expressive, elegant syntax. We belie
 
 Laravel is accessible, powerful, and provides tools required for large, robust applications.
 
+## Installation
+
+- clone this repo
+- go to this project `cd vascomm-qualification`
+- run `cp .env.example .env` for your env configuration
+- run `composer install` and `npm install`
+- run `php artisan migrate --seed`
+- Generate secret key `php artisan key:generate`
+
 ## Learning Laravel
 
 Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
